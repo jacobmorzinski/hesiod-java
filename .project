@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>hesiodResult.js</name>
+			<type>1</type>
+			<location>/afs/athena.mit.edu/user/j/m/jmorzins/workspace/Hesinfo/hesiodResult.js</location>
+		</link>
+	</linkedResources>
 </projectDescription>
