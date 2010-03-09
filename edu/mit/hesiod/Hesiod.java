@@ -188,6 +188,13 @@ public class Hesiod {
 		}
 		return new String[] {};
 	}
+	
+	public HesiodFilsysResult FilsysLookup(String filsysName)
+			throws NamingException {
+		HesiodFilsysResult hfr = (HesiodFilsysResult) resolve(filsysName, "filsys");
+		
+		return null;
+	}
 
 	/**
 	 * Alternate name for the resolve() method.

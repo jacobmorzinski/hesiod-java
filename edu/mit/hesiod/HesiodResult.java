@@ -12,6 +12,9 @@ public class HesiodResult {
 		this.results = results;
 	}
 	
+	public void parseRecords() {
+	}
+	
 	public String[] getResults() {
 		return results;
 	}
