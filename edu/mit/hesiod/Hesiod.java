@@ -117,8 +117,8 @@ public class Hesiod {
 	 * instances may be exist. This is OK, it wastes some memory to hold the
 	 * object and CPU to initialize it, but doesn't hurt anything else.
 	 */
-	public static Hesiod getInstance(String rhs) throws HesiodException, IOException,
-			NamingException {
+	public static Hesiod getInstance(String rhs)
+			throws HesiodException, IOException, NamingException {
 		Hesiod h;
 		if (_registry.containsKey(rhs)) {
 			h = _registry.get(rhs);
@@ -129,7 +129,8 @@ public class Hesiod {
 		return h;
 	}
 	
-	public static Hesiod getInstance() throws HesiodException, IOException, NamingException {
+	public static Hesiod getInstance()
+			throws HesiodException, IOException, NamingException {
 		return getInstance(null);
 	}
 
@@ -174,7 +175,8 @@ public class Hesiod {
 		return result;
 	}
 	
-	static public String[] doLookup(String hesiodName, String hesiodType) throws NamingException {
+	static public String[] doLookup(String hesiodName, String hesiodType)
+			throws NamingException {
 		Hesiod h;
 		try {
 			h = getInstance();
@@ -218,13 +220,10 @@ public class Hesiod {
 		ArrayList<String> resultList = new ArrayList<String>();
 
 		// Get a DNS answer and unwrap its layers.
-		// The DNS answer might include multiple types, of which we only want
-		// TXT.
+		// The DNS answer might include multiple types, of which we only want TXT.
 		// The TXT records might have multiple entries.
-		Attributes dnsAnswer = dnsContext.getAttributes(dnsName,
-				new String[] { dnsType });
-		NamingEnumeration<? extends Attribute> dnsAnswerTypes = dnsAnswer
-				.getAll();
+		Attributes dnsAnswer = dnsContext.getAttributes(dnsName, new String[] { dnsType });
+		NamingEnumeration<? extends Attribute> dnsAnswerTypes = dnsAnswer.getAll();
 		while (dnsAnswerTypes.hasMore()) {
 			Attribute thisType = (Attribute) dnsAnswerTypes.next();
 			if (thisType.getID().equalsIgnoreCase(dnsType)) { // "TXT" records
@@ -343,8 +342,7 @@ public class Hesiod {
 			}
 		} else {
 			try {
-				String[] result = hesiodInstance
-						.resolve(hesiodName, hesiodType);
+				String[] result = hesiodInstance.resolve(hesiodName, hesiodType);
 				for (String s : result) {
 					System.out.println(s);
 				}
