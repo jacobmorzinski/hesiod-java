@@ -180,7 +180,7 @@ public class Hesiod {
 		Hesiod h;
 		try {
 			h = getInstance();
-			return h.resolve(hesiodName, hesiodType);
+			return h.resolve(hesiodName, hesiodType).getResults();
 		} catch (IOException e) {
 			; // Ignore trouble reading config file
 		} catch (HesiodException e) {
@@ -198,7 +198,7 @@ public class Hesiod {
 	 * @param hesiodType
 	 * @throws NamingException
 	 */
-	public String[] lookup(String hesiodName, String hesiodType)
+	public HesiodResult lookup(String hesiodName, String hesiodType)
 			throws NamingException {
 		return resolve(hesiodName, hesiodType);
 	}
@@ -213,7 +213,7 @@ public class Hesiod {
 	 * @param hesiodType
 	 * @throws NamingException
 	 */
-	public String[] resolve(String hesiodName, String hesiodType)
+	public HesiodResult resolve(String hesiodName, String hesiodType)
 			throws NamingException {
 		String dnsName = toDNSName(hesiodName, hesiodType);
 		String dnsType = "txt";
@@ -240,7 +240,7 @@ public class Hesiod {
 
 		// String[0] just tells toArray() how to cast the result.
 		String[] result = resultList.toArray(new String[0]);
-		return result;
+		return new HesiodResult(result);
 	}
 
 	/**
@@ -262,7 +262,7 @@ public class Hesiod {
 			rhs = hesiodName.substring(i + 1);
 			hesiodName = hesiodName.substring(0, i);
 			if (!rhs.contains(".")) {
-				String[] rhs_list = resolve(rhs, "rhs-extension");
+				String[] rhs_list = resolve(rhs, "rhs-extension").getResults();
 				if (rhs_list.length > 0) {
 					rhs = rhs_list[0];
 				}
@@ -329,8 +329,8 @@ public class Hesiod {
 		if (hesiodType.equalsIgnoreCase("all")) {
 			for (String thisType : hesiodTypes) {
 				try {
-					String[] result = hesiodInstance.resolve(hesiodName, thisType);
-					for (String s : result) {
+					HesiodResult hr = hesiodInstance.resolve(hesiodName, thisType);
+					for (String s : hr.getResults()) {
 						System.out.format("%10s: %s\n", thisType.toUpperCase(), s);
 					}
 				} catch (NameNotFoundException e) {
@@ -342,8 +342,8 @@ public class Hesiod {
 			}
 		} else {
 			try {
-				String[] result = hesiodInstance.resolve(hesiodName, hesiodType);
-				for (String s : result) {
+				HesiodResult hr = hesiodInstance.resolve(hesiodName, hesiodType);
+				for (String s : hr.getResults()) {
 					System.out.println(s);
 				}
 			} catch (NameNotFoundException e) {
