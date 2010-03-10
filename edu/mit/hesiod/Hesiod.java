@@ -366,16 +366,6 @@ public class Hesiod {
 
 }
 
-@SuppressWarnings("serial")
-class HesiodException extends Exception {
-	HesiodException(String message) {
-		super(message);
-	}
-	HesiodException() {
-		super();
-	}
-}
-
 class HesiodContext {
 	String lhs = null;
 	String rhs = null;
