@@ -4,6 +4,7 @@
 importPackage(Packages.java.lang);
 importClass(Packages.edu.mit.hesiod.Hesiod);
 importClass(Packages.edu.mit.hesiod.HesiodResult);
+importClass(Packages.edu.mit.hesiod.HesiodFilsysResult);
 
 System.out.print("-Test an epxlicitly-created HesiodResult-\n");
 var hr = new HesiodResult(["a","b"]);
