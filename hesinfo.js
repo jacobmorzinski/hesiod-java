@@ -11,7 +11,8 @@ if (arguments.length != 2) {
 
 var h = Hesiod.getInstance();
 try {
-    var results = h.lookup(arguments[0], arguments[1]);
+    var hresults = h.lookup(arguments[0], arguments[1]);
+    var results = hresults.getResults();
     for (i in results) {
         System.out.print(results[i]+"\n");
     }
