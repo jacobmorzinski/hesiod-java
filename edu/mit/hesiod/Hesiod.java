@@ -1,14 +1,11 @@
 package edu.mit.hesiod;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
+
 import javax.naming.Context;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingEnumeration;
@@ -34,15 +31,6 @@ import javax.naming.directory.InitialDirContext;
  */
 public class Hesiod {
 
-	static String default_lhs = ".ns";
-	static String default_rhs = ".athena.mit.edu";
-
-	static String hesiod_conf_filename = "hesiod.conf";
-	static String hesiod_conf_dir = "/usr/local/etc";
-//	static String hesiod_conf_dir = "/etc/athena";
-//	static String hesiod_conf_dir = "/etc";
-//	static String hesiod_conf_dir = "/Users/jmorzins/Documents/workspace/Hesinfo";
-//	static String hesiod_conf_dir = "/afs/athena.mit.edu/user/j/m/jmorzins/workspace/Hesinfo";
 
 	HesiodContext hesiodContext = null;
 	DirContext dnsContext = null;
@@ -50,13 +38,13 @@ public class Hesiod {
 	/**
 	 * A registry of instances of the Hesiod objects.
 	 */
-	static private HashMap<String, Hesiod> _registry = new HashMap<String, Hesiod>();
+	static private Map<String, Hesiod> _registry = new HashMap<String, Hesiod>();
 
 	
 	/**
-	 * @see Hesiod#Hesiod(String)
+	 * @see {@link #Hesiod(String)}
 	 */
-	protected Hesiod() throws HesiodException, IOException, NamingException {
+	protected Hesiod() throws HesiodException {
 		this(null);
 	}
 	
@@ -68,35 +56,23 @@ public class Hesiod {
 	 * for the Hesiod search context, and set DNS as the search provider for the
 	 * JNDI search context.
 	 *
-	 * @see Hesiod#getInstance()
+	 * @see {@link #getInstance()}
 	 * @throws IOException
 	 * @throws HesiodException
 	 * @throws NamingException
 	 */
-	protected Hesiod(String rhs) throws HesiodException, IOException, NamingException {
+	protected Hesiod(String rhs) throws HesiodException {
 
-		// Initialize hesiod search context. Throws HesiodException, IOException
-		final File configFile;
-		String configName = System.getenv("HESIOD_CONFIG");
-		if (configName != null) {
-			configFile = new File(configName);
-		} else {
-			configFile = new File(hesiod_conf_dir, hesiod_conf_filename);
-		}
-		// TODO wrap in a java.security.PrivelegedAction
-		// AccessController.doPrivileged(PrivelegedAction( run() {readConfigFile();} ))
-		hesiodContext = readConfigFile(configFile);
-		String hes_domain = System.getenv("HES_DOMAIN");
-		if (hes_domain != null) {
-			hesiodContext.rhs = hes_domain;
-		}
-
+		hesiodContext = new HesiodContext(rhs);
 		// Initialize DNS search context. Throws NamingException
 		Hashtable<String, String> env = new Hashtable<String, String>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY,
-				"com.sun.jndi.dns.DnsContextFactory");
-		dnsContext = new InitialDirContext(env);
-
+				"com.sun.jndi.dns.DnsContextFactor");
+		try {
+			dnsContext = new InitialDirContext(env);
+		} catch (NamingException e) {
+			throw new HesiodException(e);
+		}
 	}
 
 	/**
@@ -117,8 +93,7 @@ public class Hesiod {
 	 * instances may be exist. This is OK, it wastes some memory to hold the
 	 * object and CPU to initialize it, but doesn't hurt anything else.
 	 */
-	public static Hesiod getInstance(String rhs)
-			throws HesiodException, IOException, NamingException {
+	public static Hesiod getInstance(String rhs) throws HesiodException {
 		Hesiod h;
 		if (_registry.containsKey(rhs)) {
 			h = _registry.get(rhs);
@@ -129,60 +104,16 @@ public class Hesiod {
 		return h;
 	}
 	
-	public static Hesiod getInstance()
-			throws HesiodException, IOException, NamingException {
+	public static Hesiod getInstance() throws HesiodException {
 		return getInstance(null);
 	}
 
-	/**
-	 * Try to read <code>rhs</code> and <code>lhs</code> from a config file.
-	 * Throws <code>HesiodException</code> if the file does not specify <code>rhs</code>.
-	 * 
-	 * @param configFile
-	 * @throws HesiodException
-	 * @throws IOException
-	 */
-	private HesiodContext readConfigFile(File configFile)
-			throws HesiodException, IOException {
-		HesiodContext result = new HesiodContext();
-
-		try {
-			String line;
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					new FileInputStream(configFile)));
-			while ((line = br.readLine()) != null) {
-				if ((line.length() != 0) && (line.charAt(0) != '#')) {
-					String[] fields = line.split("=");
-					if (fields.length == 2) {
-						String key = fields[0].trim();
-						String value = fields[1].trim();
-						if (key.equalsIgnoreCase("lhs")) {
-							result.lhs = value;
-						} else if (key.equalsIgnoreCase("rhs")) {
-							result.rhs = value;
-						}
-					}
-				}
-			}
-			if (result.rhs == null) {
-				throw new HesiodException("Invalid Hesiod configuration file.");
-			}
-		} catch (FileNotFoundException e) {
-			// use internal defaults
-			result.lhs = default_lhs;
-			result.rhs = default_rhs;
-		}
-		return result;
-	}
-	
 	static public String[] doLookup(String hesiodName, String hesiodType)
-			throws NamingException {
+			throws HesiodException, NamingException {
 		Hesiod h;
 		try {
 			h = getInstance();
 			return h.resolve(hesiodName, hesiodType).getResults();
-		} catch (IOException e) {
-			; // Ignore trouble reading config file
 		} catch (HesiodException e) {
 			; // Ignore trouble reading config file
 		}
@@ -265,7 +196,7 @@ public class Hesiod {
 		int i = hesiodName.indexOf("@");
 		if (i >= 0) {
 			// If there is an "@", we are explicitly searching
-			// a different domain's rhs. Extract rhs and trim name.
+			// a different rhs. Extract rhs and trim name.
 			rhs = hesiodName.substring(i + 1);
 			hesiodName = hesiodName.substring(0, i);
 			if (!rhs.contains(".")) {
@@ -275,10 +206,10 @@ public class Hesiod {
 				}
 			}
 		} else {
-			// No "@" in name, search our own domain's rhs.
-			rhs = hesiodContext.rhs;
+			// No "@" in name, search our own context's rhs.
+			rhs = hesiodContext.getRhs();
 		}
-		lhs = hesiodContext.lhs;
+		lhs = hesiodContext.getLhs();
 
 		dnsName.append(hesiodName);
 		dnsName.append(".");
@@ -324,13 +255,9 @@ public class Hesiod {
 		try {
 			hesiodInstance = Hesiod.getInstance();
 		} catch (HesiodException e) {
-			System.err.println("Hesiod error: " + e.getMessage());
-		} catch (IOException e) {
-			System.err.println("Hesiod error: Miscellaneous error reading configuration file.");
-			System.err.println(e);
-		} catch (NamingException e) {
-			System.err.println("Hesiod error: Could not prepare for DNS lookups.");
-			System.err.println(e);
+			System.err.println("Hesiod error during initialization.");
+			System.err.println(e.getMessage());
+			System.exit(1);
 		}
 
 		if (hesiodType.equalsIgnoreCase("all")) {
@@ -343,7 +270,7 @@ public class Hesiod {
 				} catch (NameNotFoundException e) {
 					;
 				} catch (NamingException e) {
-					System.err.println("Hesiod error: Miscellaneous DNS error.");
+					System.err.println("Hesiod error: Miscellaneous lookup error.");
 					System.err.println(e);
 				}
 			}
@@ -354,9 +281,9 @@ public class Hesiod {
 					System.out.println(s);
 				}
 			} catch (NameNotFoundException e) {
-				System.err.println("Hesiod error: Hesiod name not found.");
+				System.err.println("Hesiod name not found.");
 			} catch (NamingException e) {
-				System.err.println("Hesiod error: Miscellaneous DNS error.");
+				System.err.println("Hesiod error: Miscellaneous lookup error.");
 				System.err.println(e);
 			}
 		}
@@ -364,23 +291,4 @@ public class Hesiod {
 		return;
 	}
 
-}
-
-class HesiodContext {
-	String lhs = null;
-	String rhs = null;
-	public String toString() {
-		StringBuilder sb = new StringBuilder("");
-		if (lhs != null) {
-			if (!lhs.startsWith("."))
-				sb.append(".");
-			sb.append(lhs);
-		}
-		if (rhs != null) {
-			if (!rhs.startsWith("."))
-				sb.append(".");
-			sb.append(rhs);
-		}
-		return sb.toString();
-	}
 }
