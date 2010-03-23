@@ -67,7 +67,7 @@ public class Hesiod {
 		// Initialize DNS search context. Throws NamingException
 		Hashtable<String, String> env = new Hashtable<String, String>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY,
-				"com.sun.jndi.dns.DnsContextFactor");
+				"com.sun.jndi.dns.DnsContextFactory");
 		try {
 			dnsContext = new InitialDirContext(env);
 		} catch (NamingException e) {
