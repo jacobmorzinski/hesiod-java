@@ -11,12 +11,12 @@ if (arguments.length != 2) {
 
 var h = Hesiod.getInstance();
 try {
-    var hresults = h.lookup(arguments[0], arguments[1]);
-    var results = hresults.getResults();
+    var response = h.resolve(arguments[0], arguments[1]);
+    var results = response.getResults();
     for (i in results) {
         System.out.print(results[i]+"\n");
     }
 } catch (err) {
-    System.err.print("got err\n");
+    System.err.print("error:\n");
     System.err.print(err.message+"\n");
 }

@@ -25,7 +25,10 @@ import javax.naming.directory.InitialDirContext;
  * <p>
  * <em>Usage:</em><br>
  * Hesiod h = Hesiod.getInstance();<br>
- * String[] results = h.resolve("hesiodName", "hesiodType");<br>
+ * HesiodResult result = h.resolve("hesiodName", "hesiodType");<br>
+ * String[] results = result.getResults();<br>
+ * <br>
+ * String[] results = Hesiod.hesinfo("hesiodName", "hesiodType");<br>
  * 
  * @author jmorzins
  */
@@ -108,7 +111,7 @@ public class Hesiod {
 		return getInstance(null);
 	}
 
-	static public String[] doLookup(String hesiodName, String hesiodType)
+	static public String[] hesinfo(String hesiodName, String hesiodType)
 			throws HesiodException, NamingException {
 		Hesiod h;
 		try {
@@ -120,12 +123,69 @@ public class Hesiod {
 		return new String[] {};
 	}
 	
-	public HesiodFilsysResult filsysLookup(String filsysName)
+	public HesiodFilsysResult filsysLookup(String name)
 			throws NamingException, HesiodException {
-		HesiodResult hr = resolve(filsysName, "filsys");
+		HesiodResult hr = resolve(name, "filsys");
 		HesiodFilsysResult hfr = new HesiodFilsysResult(hr);
 		return hfr;
 	}
+
+	public HesiodPasswdResult passwdLookup(String name)
+			throws NamingException, HesiodException {
+		HesiodResult hr = resolve(name, "passwd");
+		HesiodPasswdResult hfr = new HesiodPasswdResult(hr);
+		return hfr;
+	}
+
+	public HesiodPasswdResult uidLookup(String name)
+			throws NamingException, HesiodException {
+		HesiodResult hr = resolve(name, "uid");
+		HesiodPasswdResult hfr = new HesiodPasswdResult(hr);
+		return hfr;
+	}
+	
+	public HesiodPoboxResult poboxLookup(String name)
+			throws NamingException, HesiodException {
+		HesiodResult hr = resolve(name, "pobox");
+		HesiodPoboxResult hpr = new HesiodPoboxResult(hr);
+		return hpr;
+	}
+	
+	public HesiodGroupResult groupLookup(String name)
+			throws NamingException, HesiodException {
+		HesiodResult hr = resolve(name, "group");
+		HesiodGroupResult hgr = new HesiodGroupResult(hr);
+		return hgr;
+	}
+
+	public HesiodGroupResult gidLookup(String name)
+			throws NamingException, HesiodException {
+		HesiodResult hr = resolve(name, "gid");
+		HesiodGroupResult hgr = new HesiodGroupResult(hr);
+		return hgr;
+	}
+
+	public HesiodClusterResult clusterLookup(String name)
+			throws NamingException,	HesiodException {
+		HesiodResult hr = resolve(name, "cluster");
+		HesiodClusterResult hcr = new HesiodClusterResult(hr);
+		return hcr;
+	}
+	
+	public HesiodPcapResult pcapLookup(String name)
+			throws NamingException, HesiodException {
+		HesiodResult hr = resolve(name, "pcap");
+		HesiodPcapResult hpr = new HesiodPcapResult(hr);
+		return hpr;
+	}
+	
+	public HesiodServiceResult serviceLookup(String name)
+			throws NamingException, HesiodException {
+		HesiodResult hr = resolve(name, "service");
+		HesiodServiceResult hsr = new HesiodServiceResult(hr);
+		return hsr;
+	}
+
 
 	/**
 	 * Alternate name for the resolve() method.
@@ -189,7 +249,7 @@ public class Hesiod {
 	 * @param hesiodType
 	 * @throws NamingException
 	 */
-	public String toDNSName(String hesiodName, String hesiodType)
+	String toDNSName(String hesiodName, String hesiodType)
 			throws NamingException {
 		StringBuffer dnsName = new StringBuffer(80);
 		String rhs, lhs;

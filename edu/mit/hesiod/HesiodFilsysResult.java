@@ -16,42 +16,50 @@ public class HesiodFilsysResult extends HesiodResult {
 		return filsys;
 	}
 
-	public void setFilsys(List<Map<String,String>> filsys) {
-		this.filsys = filsys;
-	}
-
-	public HesiodFilsysResult(HesiodResult hr) throws HesiodException {
-		super(hr.getResults());
-		parseFilsys();
+	public void setFilsys(List<Map<String,String>> arg) {
+		this.filsys = arg;
 	}
 
 	public HesiodFilsysResult(String[] results) throws HesiodException {
+		// Store bare results array, then parse into a list of filsys's.
 		super(results);
 		parseFilsys();
 	}
 
+	public HesiodFilsysResult(HesiodResult hr) throws HesiodException {
+		// Store bare results array, then parse into a list of filsys's.
+		super(hr.getResults());
+		parseFilsys();
+	}
+
 	protected void parseFilsys() throws HesiodException {
-		// TODO Protect against bad hesiod strings
-		// (Can hit exceptions if hesiod string is abnormally short).
+		// Iterate over the array of raw results,
+		// mostly splitting on whitespace and using those words
+        // as values in a map (whose keys depend on the FS type).
+		
+		// TODO Protect against bad input
+		// (Can hit exceptions if iter.next() fails
+        //  while parsing an abnormally short hesiod string).
 		for (String s : this.results) {
 			Map<String,String> map = new HashMap<String,String>();
 			List<String> parts = Arrays.asList(s.split("\\s"));
 			ListIterator<String> iter = parts.listIterator();
 			String type = iter.next();
 			map.put("type", type);
-			// Types: NFS, RVD, AFS, ERR, MUL
-			if (type.matches("^(AFS|UFS|LOC)$") ) {
-				map.put("location",   iter.next());
-				map.put("mode",       iter.next());
-				map.put("mountpoint", iter.next());
-				map.put("priority",   iter.hasNext() ? iter.next() : "0");
-			} else if (type.matches("^(NFS|RVD)$")) {
+			// Modern hesiod DCM creates: NFS, RVD, AFS, ERR, MUL
+			if (type.matches("^(NFS|RVD)$")) {
 				map.put("location",   iter.next());
 				map.put("server",     iter.next());
 				map.put("mode",       iter.next());
 				map.put("mountpoint", iter.next());
 				map.put("priority",   iter.hasNext() ? iter.next() : "0");
+			} else if (type.matches("^(AFS|UFS|LOC)$") ) {
+				map.put("location",   iter.next());
+				map.put("mode",       iter.next());
+				map.put("mountpoint", iter.next());
+				map.put("priority",   iter.hasNext() ? iter.next() : "0");
 			} else if (type.equals("ERR")) {
+				// The words are a text message, should not have been split.
 				// Instead of joining iterated parts, just re-split s with a limit.
 				String message = (s.split("\\s",2))[1];
 				map.put("message", message);
@@ -61,8 +69,9 @@ public class HesiodFilsysResult extends HesiodResult {
 			} else {
 				throw new HesiodException(String.format("Unknown filsys type: %s", type));
 			}
-			filsys.add(map); // Accumulate map in filesys list.
+			filsys.add(map); // Accumulate this map in filesys list.
 		}
+		// Filesystems can have an optional priority.  Sort:
 		Collections.sort(filsys, new HesiodFilsysSorter());
 	}
 	

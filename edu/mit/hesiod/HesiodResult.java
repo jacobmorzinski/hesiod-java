@@ -2,6 +2,19 @@ package edu.mit.hesiod;
 
 import java.util.Arrays;
 
+/**
+ * Represents the response from a Hesiod lookup.
+ * Has a javabean-style member field, results, with getters and setters.
+ * 
+ * <p>
+ * <em>Usage:</em><br>
+ * Hesiod h = Hesiod.getInstance();<br>
+ * HesiodResult result = h.resolve("hesiodName", "hesiodType");<br>
+ * String[] results = result.getResults();
+ * 
+ * @author jmorzins
+ *
+ */
 public class HesiodResult {
 	String[] results = {};
 
