@@ -1,13 +1,13 @@
 package edu.mit.hesiod;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
 public class HesiodGroupResult extends HesiodResult {
-	Map<String,String> group = new HashMap<String,String>();
+	Map<String,String> group = new LinkedHashMap<String,String>();
 	
 	public Map<String,String> getGroup() {
 		return group;
@@ -38,13 +38,13 @@ public class HesiodGroupResult extends HesiodResult {
 		//  name:*:gid:
 		// These are traditionally named:
 		//  name:passwd:gid:mem
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String,String> map = new LinkedHashMap<String,String>();
 		List<String> parts = Arrays.asList(s.split(":"));
 		ListIterator<String> iter = parts.listIterator();
-		map.put("name",   iter.next());
-		map.put("passwd", iter.next());
-		map.put("gid",    iter.next());
-		map.put("mem",    iter.hasNext() ? iter.next() : "");
+		if (iter.hasNext()) map.put("name",   iter.next());
+		if (iter.hasNext()) map.put("passwd", iter.next());
+		if (iter.hasNext()) map.put("gid",    iter.next());
+		if (iter.hasNext()) map.put("mem",    iter.next());
 		
 		this.group = map;
 	}

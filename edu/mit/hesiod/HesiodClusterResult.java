@@ -1,12 +1,12 @@
 package edu.mit.hesiod;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class HesiodClusterResult extends HesiodResult {
-	Map<String,List<String>> cluster = new HashMap<String,List<String>>();
+	Map<String,List<String>> cluster = new LinkedHashMap<String,List<String>>();
 	
 	public Map<String, List<String>> getCluster() {
 		return cluster;

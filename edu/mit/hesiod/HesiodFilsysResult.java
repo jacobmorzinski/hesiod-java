@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -41,23 +41,23 @@ public class HesiodFilsysResult extends HesiodResult {
 		// (Can hit exceptions if iter.next() fails
         //  while parsing an abnormally short hesiod string).
 		for (String s : this.results) {
-			Map<String,String> map = new HashMap<String,String>();
+			Map<String,String> map = new LinkedHashMap<String,String>();
 			List<String> parts = Arrays.asList(s.split("\\s"));
 			ListIterator<String> iter = parts.listIterator();
 			String type = iter.next();
 			map.put("type", type);
 			// Modern hesiod DCM creates: NFS, RVD, AFS, ERR, MUL
 			if (type.matches("^(NFS|RVD)$")) {
-				map.put("location",   iter.next());
-				map.put("server",     iter.next());
-				map.put("mode",       iter.next());
-				map.put("mountpoint", iter.next());
-				map.put("priority",   iter.hasNext() ? iter.next() : "0");
+				if (iter.hasNext()) map.put("location",   iter.next());
+				if (iter.hasNext()) map.put("server",     iter.next());
+				if (iter.hasNext()) map.put("mode",       iter.next());
+				if (iter.hasNext()) map.put("mountpoint", iter.next());
+				if (iter.hasNext()) map.put("priority",   iter.next());
 			} else if (type.matches("^(AFS|UFS|LOC)$") ) {
-				map.put("location",   iter.next());
-				map.put("mode",       iter.next());
-				map.put("mountpoint", iter.next());
-				map.put("priority",   iter.hasNext() ? iter.next() : "0");
+				if (iter.hasNext()) map.put("location",   iter.next());
+				if (iter.hasNext()) map.put("mode",       iter.next());
+				if (iter.hasNext()) map.put("mountpoint", iter.next());
+				if (iter.hasNext()) map.put("priority",   iter.next());
 			} else if (type.equals("ERR")) {
 				// The words are a text message, should not have been split.
 				// Instead of joining iterated parts, just re-split s with a limit.

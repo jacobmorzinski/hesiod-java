@@ -58,10 +58,12 @@ var hcr = h.lookupCluster("early-linux");
 System.out.print(hcr.getCluster() + "\n");
 var hcr = h.lookupCluster("horobi.mit.edu");
 System.out.print(hcr.getCluster() + "\n");
-System.out.print(hcr.getCluster().get(0) + "\n");
-System.out.print(hcr.getCluster().get(0).get(0) + "\n");
+System.out.print(hcr.getCluster().get("syscontrol") + "\n");
+System.out.print(hcr.getCluster().get("syscontrol").get(0) + "\n");
 
 System.out.print("-Test lookupPcap(...)-\n");
+var hpr = h.lookupPcap("sipb");
+System.out.print(hpr.getPcap() + "\n");
 var hpr = h.lookupPcap("mark-the-great");
 System.out.print(hpr.getPcap() + "\n");
 var hpr = h.lookupPcap("ashdown");

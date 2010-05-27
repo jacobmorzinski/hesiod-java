@@ -1,13 +1,13 @@
 package edu.mit.hesiod;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
 public class HesiodPcapResult extends HesiodResult {
-	Map<String,Object> pcap = new HashMap<String,Object>();
+	Map<String,Object> pcap = new LinkedHashMap<String,Object>();
 	
 	public Map<String,Object> getPcap() {
 		return pcap;
@@ -37,7 +37,7 @@ public class HesiodPcapResult extends HesiodResult {
 		// Hesiod line has: 
 		//  name:option:option:option:option...
 		
-
+//      From printcap(5) man page:
 //	       Keywords  can  be 1 to an indefinite number of characters long, and are
 //	       case sensitive.  Values for  keywords  can  be  strings  (:st=string:),
 //	       signed    integer    values    using    the    C   language   notation,
@@ -45,13 +45,14 @@ public class HesiodPcapResult extends HesiodResult {
 //	       clear  to  0).
 		
 		
-		Map<String, Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new LinkedHashMap<String,Object>();
 		List<String> parts = Arrays.asList(s.split(":"));
 		ListIterator<String> iter = parts.listIterator();
 		String[] t;
 		String part;
 
-		map.put("name",   iter.next());
+		if (iter.hasNext()) map.put("name", iter.next());
+
 		while (iter.hasNext()) {
 			part = iter.next();
 			if (part.contains("=")) {

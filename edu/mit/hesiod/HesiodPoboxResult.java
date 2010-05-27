@@ -1,13 +1,13 @@
 package edu.mit.hesiod;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
 public class HesiodPoboxResult extends HesiodResult {
-	Map<String,String> pobox = new HashMap<String,String>();
+	Map<String,String> pobox = new LinkedHashMap<String,String>();
 	
 	public Map<String,String> getPobox() {
 		return pobox;
@@ -36,12 +36,12 @@ public class HesiodPoboxResult extends HesiodResult {
 		// Split it into fields to store in a map.
 		// Hesiod line has: 
 		//  POP machine login
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String,String> map = new LinkedHashMap<String,String>();
 		List<String> parts = Arrays.asList(s.split("\\s"));
 		ListIterator<String> iter = parts.listIterator();
-		map.put("type", iter.next()); // WARNING: obsolete/vestigial
-		map.put("host", iter.next());
-		map.put("name", iter.next());
+		if (iter.hasNext()) map.put("type", iter.next()); // WARNING: obsolete/vestigial
+		if (iter.hasNext()) map.put("host", iter.next());
+		if (iter.hasNext()) map.put("name", iter.next());
 		
 		this.pobox = map;
 	}

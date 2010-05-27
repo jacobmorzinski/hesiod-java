@@ -2,7 +2,7 @@ package edu.mit.hesiod;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -33,12 +33,12 @@ public class HesiodServiceResult extends HesiodResult {
 	protected void parseService() throws HesiodException {
 
 		for (String s : this.results) {
-			Map<String,String> map = new HashMap<String,String>();
+			Map<String,String> map = new LinkedHashMap<String,String>();
 			List<String> parts = Arrays.asList(s.split("\\s",3));
 			ListIterator<String> iter = parts.listIterator();
-			map.put("name",  iter.next());
-			map.put("proto", iter.next());
-			map.put("port",  iter.next());
+			if (iter.hasNext()) map.put("name",  iter.next());
+			if (iter.hasNext()) map.put("proto", iter.next());
+			if (iter.hasNext()) map.put("port",  iter.next());
 			
 			service.add(map); // Accumulate this map in service list.
 		}
