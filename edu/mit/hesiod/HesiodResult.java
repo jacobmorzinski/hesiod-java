@@ -34,6 +34,9 @@ public class HesiodResult {
 		this.results = result;
 	}
 	
+	public HesiodResult() {
+	}
+	
 	public HesiodResult(String[] results) {
 		this.results = results;
 	}

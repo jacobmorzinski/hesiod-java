@@ -111,75 +111,85 @@ public class Hesiod {
 		return getInstance(null);
 	}
 
+	/**
+	 * Convenience method to perform a hesiod information lookup.
+	 * 
+	 * @param hesiodName
+	 * @param hesiodType
+	 * @return Array of result strings, or empty array.
+	 * @throws HesiodException
+	 * @throws NamingException
+	 */
 	static public String[] hesinfo(String hesiodName, String hesiodType)
 			throws HesiodException, NamingException {
 		Hesiod h;
+		String[] results = new String[] {};
 		try {
 			h = getInstance();
-			return h.resolve(hesiodName, hesiodType).getResults();
+			results = h.resolve(hesiodName, hesiodType).getResults();
 		} catch (HesiodException e) {
 			; // Ignore trouble reading config file
 		}
-		return new String[] {};
+		return results;
 	}
 	
-	public HesiodFilsysResult filsysLookup(String name)
+	public HesiodFilsysResult lookupFilsys(String name)
 			throws NamingException, HesiodException {
 		HesiodResult hr = resolve(name, "filsys");
 		HesiodFilsysResult hfr = new HesiodFilsysResult(hr);
 		return hfr;
 	}
 
-	public HesiodPasswdResult passwdLookup(String name)
+	public HesiodPasswdResult lookupPasswd(String name)
 			throws NamingException, HesiodException {
 		HesiodResult hr = resolve(name, "passwd");
 		HesiodPasswdResult hfr = new HesiodPasswdResult(hr);
 		return hfr;
 	}
 
-	public HesiodPasswdResult uidLookup(String name)
+	public HesiodPasswdResult lookupUID(String name)
 			throws NamingException, HesiodException {
 		HesiodResult hr = resolve(name, "uid");
 		HesiodPasswdResult hfr = new HesiodPasswdResult(hr);
 		return hfr;
 	}
 	
-	public HesiodPoboxResult poboxLookup(String name)
+	public HesiodPoboxResult lookupPobox(String name)
 			throws NamingException, HesiodException {
 		HesiodResult hr = resolve(name, "pobox");
 		HesiodPoboxResult hpr = new HesiodPoboxResult(hr);
 		return hpr;
 	}
 	
-	public HesiodGroupResult groupLookup(String name)
+	public HesiodGroupResult lookupGroup(String name)
 			throws NamingException, HesiodException {
 		HesiodResult hr = resolve(name, "group");
 		HesiodGroupResult hgr = new HesiodGroupResult(hr);
 		return hgr;
 	}
 
-	public HesiodGroupResult gidLookup(String name)
+	public HesiodGroupResult lookupGID(String name)
 			throws NamingException, HesiodException {
 		HesiodResult hr = resolve(name, "gid");
 		HesiodGroupResult hgr = new HesiodGroupResult(hr);
 		return hgr;
 	}
 
-	public HesiodClusterResult clusterLookup(String name)
+	public HesiodClusterResult lookupCluster(String name)
 			throws NamingException,	HesiodException {
 		HesiodResult hr = resolve(name, "cluster");
 		HesiodClusterResult hcr = new HesiodClusterResult(hr);
 		return hcr;
 	}
 	
-	public HesiodPcapResult pcapLookup(String name)
+	public HesiodPcapResult lookupPcap(String name)
 			throws NamingException, HesiodException {
 		HesiodResult hr = resolve(name, "pcap");
 		HesiodPcapResult hpr = new HesiodPcapResult(hr);
 		return hpr;
 	}
 	
-	public HesiodServiceResult serviceLookup(String name)
+	public HesiodServiceResult lookupService(String name)
 			throws NamingException, HesiodException {
 		HesiodResult hr = resolve(name, "service");
 		HesiodServiceResult hsr = new HesiodServiceResult(hr);

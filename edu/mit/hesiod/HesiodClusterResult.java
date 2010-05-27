@@ -1,18 +1,18 @@
 package edu.mit.hesiod;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 public class HesiodClusterResult extends HesiodResult {
-	List<List<String>> cluster = new ArrayList<List<String>>();
+	Map<String,List<String>> cluster = new HashMap<String,List<String>>();
 	
-	public List<List<String>> getCluster() {
+	public Map<String, List<String>> getCluster() {
 		return cluster;
 	}
 
-	public void setPasswd(List<List<String>> arg) {
+	public void setCluster(Map<String, List<String>> arg) {
 		this.cluster = arg;
 	}
 
@@ -30,8 +30,15 @@ public class HesiodClusterResult extends HesiodResult {
 
 	protected void parseCluster() throws HesiodException {
 		for (String s : this.results) {
-			List<String> parts = Arrays.asList(s.split("\\s"));
-			cluster.add(parts);
+			String[] parts = s.split("\\s", 2);
+			if (cluster.containsKey(parts[0])) {
+				List<String> l = cluster.get(parts[0]);
+				l.add(parts[1]);
+			} else {
+				List<String> l = new ArrayList<String>();
+				cluster.put(parts[0], l);
+				l.add(parts[1]);
+			}
 		}
 	}
 }
