@@ -1,6 +1,9 @@
 package edu.mit.hesiod;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Represents the response from a Hesiod lookup.
@@ -15,33 +18,57 @@ import java.util.Arrays;
  * @author jmorzins
  *
  */
-public class HesiodResult {
-	String[] results = {};
+public class HesiodResult implements Iterable<String> {
+	List<String> results;
 
+	/* Constructors */
+	public HesiodResult() {
+		results = new ArrayList<String>();
+	}
+	
+	public HesiodResult(String[] result) {
+		results = new ArrayList<String>();
+		results.addAll(Arrays.asList(result));
+	}
+	
+	public HesiodResult(List<String> result) {
+		results = new ArrayList<String>();
+		results.addAll(result);
+	}
+
+	/* Java bean indexed property methods:
+	 * 	
+	 * Methods to access individual values
+     *  public PropertyElement getPropertyName(int index)
+	 *  public void setPropertyName(int index, PropertyElement element)
+	 * Methods to access the entire indexed property array
+     *  public PropertyElement[] getPropertyName()
+	 *  public void setPropertyName(PropertyElement element[])
+	 *
+	 */
 	public String getResults(int index) {
-		return this.results[index];
+		return results.get(index);
 	}
 	
 	public String[] getResults() {
-		return this.results;
+		return results.toArray(new String[0]);
 	}
 
 	public void setResults(int index, String result) {
-		this.results[index] = result;
+		results.set(index, result);
 	}
 
 	public void setResults(String[] result) {
-		this.results = result;
+		results = new ArrayList<String>();
+		results.addAll(Arrays.asList(result));
 	}
-	
-	public HesiodResult() {
+		
+	/* Implement the Iterable interface */
+	public Iterator<String> iterator() {
+		return results.iterator();
 	}
-	
-	public HesiodResult(String[] results) {
-		this.results = results;
-	}
-	
+
 	public String toString() {
-		return Arrays.asList(results).toString();
+		return results.toString();
 	}
 }

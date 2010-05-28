@@ -2,46 +2,38 @@ package edu.mit.hesiod;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
-public class HesiodServiceResult extends HesiodResult {
-	List<Map<String,String>> service = new ArrayList<Map<String,String>>();
+public class HesiodServiceResult implements Iterable<Map<String,String>> {
+	List<Map<String,String>> services;
 	
-	public List<Map<String,String>> getService() {
-		return service;
+	public HesiodServiceResult() {
+		services = new ArrayList<Map<String,String>>();
 	}
-
-	public void setService(List<Map<String, String>> arg) {
-		this.service = arg;
-	}
-
-	public HesiodServiceResult(String[] results) throws HesiodException {
-		// Store bare results array, then parse.
-		super(results);
-		parseService();
-	}
-
+	
 	public HesiodServiceResult(HesiodResult hr) throws HesiodException {
-		// Store bare results array, then parse.
-		super(hr.getResults());
-		parseService();
+		 services = new ArrayList<Map<String,String>>();
+		 for (String s : hr) {
+			 services.add(parse(s));
+		 }
 	}
 
-	protected void parseService() throws HesiodException {
+	static Map<String,String> parse(String s) throws HesiodException {
+		Map<String,String> map = new LinkedHashMap<String,String>();
+		List<String> parts = Arrays.asList(s.split("\\s",3));
+		Iterator<String> iter = parts.iterator();
+		if (iter.hasNext()) map.put("name",  iter.next());
+		if (iter.hasNext()) map.put("proto", iter.next());
+		if (iter.hasNext()) map.put("port",  iter.next());
+		return map;
+	}
 
-		for (String s : this.results) {
-			Map<String,String> map = new LinkedHashMap<String,String>();
-			List<String> parts = Arrays.asList(s.split("\\s",3));
-			ListIterator<String> iter = parts.listIterator();
-			if (iter.hasNext()) map.put("name",  iter.next());
-			if (iter.hasNext()) map.put("proto", iter.next());
-			if (iter.hasNext()) map.put("port",  iter.next());
-			
-			service.add(map); // Accumulate this map in service list.
-		}
+	public Iterator<Map<String, String>> iterator() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 

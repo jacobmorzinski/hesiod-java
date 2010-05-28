@@ -247,8 +247,8 @@ public class Hesiod {
 		}
 
 		// String[0] just tells toArray() how to cast the result.
-		String[] result = resultList.toArray(new String[0]);
-		return new HesiodResult(result);
+		// String[] result = resultList.toArray(new String[0]);
+		return new HesiodResult(resultList);
 	}
 
 	/**

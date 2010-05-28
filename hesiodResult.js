@@ -3,38 +3,47 @@
 
 importPackage(Packages.java.lang);
 importClass(Packages.edu.mit.hesiod.Hesiod);
-importClass(Packages.edu.mit.hesiod.HesiodResult);
+// importClass(Packages.edu.mit.hesiod.HesiodResult);
 // importClass(Packages.edu.mit.hesiod.HesiodFilsysResult);
 
-System.out.print("-Test an epxlicitly-created HesiodResult-\n");
-var hr = new HesiodResult(["a","b"]);
-System.out.print(hr + "\n");
+// System.out.print("-Test an epxlicitly-created HesiodResult-\n");
+// var hr = new HesiodResult(["a","b"]);
+// System.out.print(hr + "\n");
 
-System.out.print("-Test a generic hesiod lookup(sipb,pcap)-\n");
+System.out.print("-Test a generic hesiod lookup(sipb,filsys)-\n");
 var h = Hesiod.getInstance();
-var hr = h.lookup("sipb","pcap");
+var hr = h.lookup("sipb","filsys");
 System.out.print(hr + "\n");
+for (var hri=hr.iterator(); hri.hasNext(); ) {
+    System.out.print(hri.next() + "\n");
+}
 
 System.out.print("-Test lookupFilsys(steini)-\n");
 var hfr = h.lookupFilsys("steini");
-System.out.print(hfr.getFilsys()+"\n");
+System.out.print(hfr + "\n");
 
 System.out.print("-Test lookupFilsys(sipb)-\n");
 var hfr = h.lookupFilsys("sipb");
-// System.out.print(hfr + "\n");
-System.out.print(hfr.getFilsys() + "\n");
+System.out.print(hfr + "\n");
 
 System.out.print("-Test lookupFilsys(zacheiss)-\n");
 var hfr = h.lookupFilsys("zacheiss");
-// System.out.print(hfr + "\n");
-System.out.print(hfr.getFilsys() + "\n");
-System.out.print(hfr.getFilsys().get(0) + "\n");
-System.out.print(hfr.getFilsys().get(0).get("mountpoint") + "\n");
+var iter = hfr.iterator();
+if (iter.hasNext()) {
+	var r = iter.next();
+	System.out.print(r.get("mountpoint") + "\n");
+	System.out.print(r+"\n");
+}
+while (iter.hasNext()) {
+	System.out.print(iter.next() + "\n");
+}
 
 System.out.print("-Test lookupFilsys(dev-sun4sys-94)-\n");
 var hfr = h.lookupFilsys("dev-sun4sys-94");
-System.out.print(hfr.getFilsys() + "\n");
-System.out.print(hfr.getFilsys().get(0).get("locations") + "\n");
+System.out.print(hfr + "\n");
+System.out.print(hfr.iterator().next().get("locations") + "\n");
+
+quit();
 
 System.out.print("-Test lookupPasswd(jmorzins)-\n");
 var hpr = h.lookupPasswd("jmorzins");
