@@ -1,37 +1,28 @@
 package edu.mit.hesiod;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-public class HesiodPoboxResult extends HesiodResult {
-	Map<String,String> pobox = new LinkedHashMap<String,String>();
+public class HesiodPoboxResult implements Iterable<Map<String,String>> {
+	List<Map<String,String>> poboxes;
 	
-	public Map<String,String> getPobox() {
-		return pobox;
+	public HesiodPoboxResult() {
+		poboxes = new ArrayList<Map<String,String>>();
 	}
 
-	public void setPobox(Map<String, String> arg) {
-		this.pobox = arg;
+	public HesiodPoboxResult(HesiodResult hr) {
+		poboxes = new ArrayList<Map<String,String>>();
+		for (String s : hr) {
+			poboxes.add(parse(s));
+		}
 	}
 
-	public HesiodPoboxResult(String[] results) throws HesiodException {
-		// Store bare results array, then parse into pobox info.
-		super(results);
-		parsePobox();
-	}
-
-	public HesiodPoboxResult(HesiodResult hr) throws HesiodException {
-		// Store bare results array, then parse into pobox info.
-		super(hr.getResults());
-		parsePobox();
-	}
-
-	protected void parsePobox() throws HesiodException {
-		// Assume there is only one pobox.
-		String s = this.getResults(0);
+	static Map<String, String> parse(String s) {
 
 		// Split it into fields to store in a map.
 		// Hesiod line has: 
@@ -39,11 +30,18 @@ public class HesiodPoboxResult extends HesiodResult {
 		Map<String,String> map = new LinkedHashMap<String,String>();
 		List<String> parts = Arrays.asList(s.split("\\s"));
 		ListIterator<String> iter = parts.listIterator();
-		if (iter.hasNext()) map.put("type", iter.next()); // WARNING: obsolete/vestigial
+		if (iter.hasNext()) map.put("type", iter.next());
 		if (iter.hasNext()) map.put("host", iter.next());
 		if (iter.hasNext()) map.put("name", iter.next());
-		
-		this.pobox = map;
+		return map;
+	}
+
+	public Iterator<Map<String, String>> iterator() {
+		return poboxes.iterator();
+	}
+	
+	public String toString() {
+		return poboxes.toString();
 	}
 }
 

@@ -14,14 +14,14 @@ public class HesiodServiceResult implements Iterable<Map<String,String>> {
 		services = new ArrayList<Map<String,String>>();
 	}
 	
-	public HesiodServiceResult(HesiodResult hr) throws HesiodException {
+	public HesiodServiceResult(HesiodResult hr) {
 		 services = new ArrayList<Map<String,String>>();
 		 for (String s : hr) {
 			 services.add(parse(s));
 		 }
 	}
 
-	static Map<String,String> parse(String s) throws HesiodException {
+	static Map<String,String> parse(String s) {
 		Map<String,String> map = new LinkedHashMap<String,String>();
 		List<String> parts = Arrays.asList(s.split("\\s",3));
 		Iterator<String> iter = parts.iterator();
@@ -32,8 +32,11 @@ public class HesiodServiceResult implements Iterable<Map<String,String>> {
 	}
 
 	public Iterator<Map<String, String>> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return services.iterator();
+	}
+	
+	public String toString() {
+		return services.toString();
 	}
 }
 

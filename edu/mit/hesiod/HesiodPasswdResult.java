@@ -1,37 +1,28 @@
 package edu.mit.hesiod;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-public class HesiodPasswdResult extends HesiodResult {
-	Map<String,String> passwd = new LinkedHashMap<String,String>();
+public class HesiodPasswdResult implements Iterable<Map<String,String>> {
+	List<Map<String,String>> passwds;
 	
-	public Map<String,String> getPasswd() {
-		return passwd;
+	public HesiodPasswdResult() {
+		passwds = new ArrayList<Map<String,String>>();
 	}
 
-	public void setPasswd(Map<String, String> arg) {
-		this.passwd = arg;
+	public HesiodPasswdResult(HesiodResult hr) {
+		passwds = new ArrayList<Map<String,String>>();
+		for (String s : hr) {
+			passwds.add(parse(s));
+		}
 	}
 
-	public HesiodPasswdResult(String[] results) throws HesiodException {
-		// Store bare results array, then parse.
-		super(results);
-		parsePasswd();
-	}
-
-	public HesiodPasswdResult(HesiodResult hr) throws HesiodException {
-		// Store bare results array, then parse.
-		super(hr.getResults());
-		parsePasswd();
-	}
-
-	protected void parsePasswd() throws HesiodException {
-		// Assume there is only one passwd.
-		String s = this.getResults(0);
+	static Map<String,String> parse(String s) {
 
 		// Split it into fields to store in a map.
 		// Hesiod line has: 
@@ -50,7 +41,15 @@ public class HesiodPasswdResult extends HesiodResult {
 		if (iter.hasNext()) map.put("dir",    iter.next());
 		if (iter.hasNext()) map.put("shell",  iter.next());
 		
-		this.passwd = map;
+		return map;
+	}
+
+	public Iterator<Map<String, String>> iterator() {
+		return passwds.iterator();
+	}
+	
+	public String toString() {
+		return passwds.toString();
 	}
 }
 

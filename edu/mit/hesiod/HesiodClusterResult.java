@@ -1,45 +1,38 @@
 package edu.mit.hesiod;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HesiodClusterResult extends HesiodResult {
-	Map<String,List<String>> cluster = new LinkedHashMap<String,List<String>>();
+public class HesiodClusterResult implements Iterable<Map<String,String>> {
+	List<Map<String,String>> clusters;
 	
-	public Map<String, List<String>> getCluster() {
-		return cluster;
+	public HesiodClusterResult() {
+		clusters = new ArrayList<Map<String,String>>();
 	}
 
-	public void setCluster(Map<String, List<String>> arg) {
-		this.cluster = arg;
-	}
-
-	public HesiodClusterResult(String[] results) throws HesiodException {
-		// Store bare results array, then parse.
-		super(results);
-		parseCluster();
-	}
-
-	public HesiodClusterResult(HesiodResult hr) throws HesiodException {
-		// Store bare results array, then parse.
-		super(hr.getResults());
-		parseCluster();
-	}
-
-	protected void parseCluster() throws HesiodException {
-		for (String s : this.results) {
-			String[] parts = s.split("\\s", 2);
-			if (cluster.containsKey(parts[0])) {
-				List<String> l = cluster.get(parts[0]);
-				l.add(parts[1]);
-			} else {
-				List<String> l = new ArrayList<String>();
-				cluster.put(parts[0], l);
-				l.add(parts[1]);
-			}
+	public HesiodClusterResult(HesiodResult hr) {
+		clusters = new ArrayList<Map<String,String>>();
+		for (String s : hr) {
+			clusters.add(parse(s));
 		}
+	}
+
+	protected Map<String,String> parse(String s) {
+		Map<String,String> map = new LinkedHashMap<String,String>();
+		String[] parts = s.split("\\s", 2);
+		map.put(parts[0], parts[1]);
+		return map;
+	}
+
+	public Iterator<Map<String, String>> iterator() {
+		return clusters.iterator();
+	}
+	
+	public String toString() {
+		return clusters.toString();
 	}
 }
 

@@ -1,87 +1,95 @@
 // jrunscript -classpath . hesinfo.js
 // Rhino hesinfo.js
 
-importPackage(Packages.java.lang);
+var out = Packages.java.lang.System.out;
+var err = Packages.java.lang.System.err;
 importClass(Packages.edu.mit.hesiod.Hesiod);
 // importClass(Packages.edu.mit.hesiod.HesiodResult);
 // importClass(Packages.edu.mit.hesiod.HesiodFilsysResult);
 
-// System.out.print("-Test an epxlicitly-created HesiodResult-\n");
+// out.print("-Test an epxlicitly-created HesiodResult-\n");
 // var hr = new HesiodResult(["a","b"]);
-// System.out.print(hr + "\n");
+// out.print(hr + "\n");
 
-System.out.print("-Test a generic hesiod lookup(sipb,filsys)-\n");
+out.print("-Test a generic hesiod lookup(sipb,filsys)-\n");
 var h = Hesiod.getInstance();
 var hr = h.lookup("sipb","filsys");
-System.out.print(hr + "\n");
+out.print(hr + "\n");
 for (var hri=hr.iterator(); hri.hasNext(); ) {
-    System.out.print(hri.next() + "\n");
+    out.print(hri.next() + "\n");
 }
 
-System.out.print("-Test lookupFilsys(steini)-\n");
+out.print("-Test lookupFilsys(steini)-\n");
 var hfr = h.lookupFilsys("steini");
-System.out.print(hfr + "\n");
+out.print(hfr + "\n");
 
-System.out.print("-Test lookupFilsys(sipb)-\n");
+out.print("-Test lookupFilsys(sipb)-\n");
 var hfr = h.lookupFilsys("sipb");
-System.out.print(hfr + "\n");
+out.print(hfr + "\n");
 
-System.out.print("-Test lookupFilsys(zacheiss)-\n");
+out.print("-Test lookupFilsys(zacheiss)-\n");
 var hfr = h.lookupFilsys("zacheiss");
 var iter = hfr.iterator();
 if (iter.hasNext()) {
 	var r = iter.next();
-	System.out.print(r.get("mountpoint") + "\n");
-	System.out.print(r+"\n");
+	out.print(r.get("mountpoint") + "\n");
+	out.print(r+"\n");
 }
 while (iter.hasNext()) {
-	System.out.print(iter.next() + "\n");
+	out.print(iter.next() + "\n");
 }
 
-System.out.print("-Test lookupFilsys(dev-sun4sys-94)-\n");
+out.print("-Test lookupFilsys(dev-sun4sys-94)-\n");
 var hfr = h.lookupFilsys("dev-sun4sys-94");
-System.out.print(hfr + "\n");
-System.out.print(hfr.iterator().next().get("locations") + "\n");
+out.print(hfr + "\n");
+out.print(hfr.iterator().next().get("locations") + "\n");
+
+out.print("-Test lookupPasswd(jmorzins)-\n");
+var hpr = h.lookupPasswd("jmorzins").iterator().next();
+out.print(hpr + "\n");
+out.print(hpr.get("gecos") + "\n");
+
+out.print("-Test lookupPobox(jmorzins)-\n");
+var hpr = h.lookupPobox("jmorzins").iterator().next();
+out.print(hpr + "\n");
+out.print(hpr.get("host") + "\n");
+
+out.print("-Test lookupGroup(gaccounts)-\n");
+var hgr = h.lookupGroup("gaccounts").iterator().next();
+out.print(hgr + "\n");
+out.print(hgr.get("gid") + "\n");
+
+out.print("-Test lookupCluster(...)-\n");
+var hcr = h.lookupCluster("mark-the-great-print");
+out.print(hcr + "\n");
+var hcr = h.lookupCluster("early-linux");
+out.print(hcr + "\n");
+var hcr = h.lookupCluster("horobi.mit.edu");
+for (var hcri = hcr.iterator(); hcri.hasNext(); ) {
+    var r = hcri.next();
+    out.print(r + "\n");
+}
+for (var hcri = hcr.iterator(); hcri.hasNext(); ) {
+    var r = hcri.next();
+    if (r.containsKey("syscontrol")) {
+	out.print(r.get("syscontrol") + "\n");
+    }
+}
+
+out.print("-Test lookupPcap(...)-\n");
+var hpr = h.lookupPcap("sipb");
+out.print(hpr + "\n");
+var hpr = h.lookupPcap("mark-the-great");
+out.print(hpr + "\n");
+var hpr = h.lookupPcap("ashdown").iterator().next();
+out.print(hpr + "\n");
+out.print(hpr.get("name") + "\n");
 
 quit();
 
-System.out.print("-Test lookupPasswd(jmorzins)-\n");
-var hpr = h.lookupPasswd("jmorzins");
-System.out.print(hpr.getPasswd() + "\n");
-System.out.print(hpr.getPasswd().get("gecos") + "\n");
-
-System.out.print("-Test lookupPobox(jmorzins)-\n");
-var hpr = h.lookupPobox("jmorzins");
-System.out.print(hpr.getPobox() + "\n");
-System.out.print(hpr.getPobox().get("host") + "\n");
-
-System.out.print("-Test lookupGroup(gaccounts)-\n");
-var hgr = h.lookupGroup("gaccounts");
-System.out.print(hgr.getGroup() + "\n");
-System.out.print(hgr.getGroup().get("gid") + "\n");
-
-System.out.print("-Test lookupCluster(...)-\n");
-var hcr = h.lookupCluster("mark-the-great-print");
-System.out.print(hcr.getCluster() + "\n");
-var hcr = h.lookupCluster("early-linux");
-System.out.print(hcr.getCluster() + "\n");
-var hcr = h.lookupCluster("horobi.mit.edu");
-System.out.print(hcr.getCluster() + "\n");
-System.out.print(hcr.getCluster().get("syscontrol") + "\n");
-System.out.print(hcr.getCluster().get("syscontrol").get(0) + "\n");
-
-System.out.print("-Test lookupPcap(...)-\n");
-var hpr = h.lookupPcap("sipb");
-System.out.print(hpr.getPcap() + "\n");
-var hpr = h.lookupPcap("mark-the-great");
-System.out.print(hpr.getPcap() + "\n");
-var hpr = h.lookupPcap("ashdown");
-System.out.print(hpr.getPcap() + "\n");
-System.out.print(hpr.getPcap().get("name") + "\n");
-
-System.out.print("-Test lookupService(...)-\n");
+out.print("-Test lookupService(...)-\n");
 var hsr = h.lookupService("moira_db");
-System.out.print(hsr.getService() + "\n");
+out.print(hsr.getService() + "\n");
 var hsr = h.lookupService("echo");
-System.out.print(hsr.getService() + "\n");
-System.out.print(hsr.getService().get(0).get("name") + "\n");
+out.print(hsr.getService() + "\n");
+out.print(hsr.getService().get(0).get("name") + "\n");

@@ -1,37 +1,28 @@
 package edu.mit.hesiod;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-public class HesiodPcapResult extends HesiodResult {
-	Map<String,Object> pcap = new LinkedHashMap<String,Object>();
+public class HesiodPcapResult implements Iterable<Map<String,Object>> {
+	List<Map<String,Object>> pcaps;
 	
-	public Map<String,Object> getPcap() {
-		return pcap;
-	}
-
-	public void setPcap(Map<String, Object> arg) {
-		this.pcap = arg;
-	}
-
-	public HesiodPcapResult(String[] results) throws HesiodException {
-		// Store bare results array, then parse.
-		super(results);
-		parsePcap();
+	public HesiodPcapResult() {
+		pcaps = new ArrayList<Map<String,Object>>();
 	}
 
 	public HesiodPcapResult(HesiodResult hr) throws HesiodException {
-		// Store bare results array, then parse.
-		super(hr.getResults());
-		parsePcap();
+		pcaps = new ArrayList<Map<String,Object>>();
+		for (String s : hr) {
+		pcaps.add(parse(s));
+		}
 	}
 
-	protected void parsePcap() throws HesiodException {
-		// Assume there is only one pcap.
-		String s = this.getResults(0);
+	static Map<String,Object> parse(String s) throws HesiodException {
 
 		// Split it into fields to store in a map.
 		// Hesiod line has: 
@@ -77,7 +68,15 @@ public class HesiodPcapResult extends HesiodResult {
 			}
 		}
 		
-		this.pcap = map;
+		return map;
+	}
+
+	public Iterator<Map<String, Object>> iterator() {
+		return pcaps.iterator();
+	}
+	
+	public String toString() {
+		return pcaps.toString();
 	}
 }
 

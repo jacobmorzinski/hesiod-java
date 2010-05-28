@@ -1,22 +1,23 @@
 // jrunscript -classpath . hesinfo.js
 // Rhino hesinfo.js
 
-importPackage(Packages.java.lang);
+var out = Packages.java.lang.System.out;
+var err = Packages.java.lang.System.err;
 importClass(Packages.edu.mit.hesiod.Hesiod);
 
 if (arguments.length != 2) {
-    System.out.print("Usage: hesinfo <name> <type>\n");
-    System.exit(1);
+    out.print("Usage: hesinfo <name> <type>\n");
+    quit(1);
 }
 
 var h = Hesiod.getInstance();
 try {
     var hr = h.resolve(arguments[0], arguments[1]);
-    var results = hr.getResults();
-    for (i in results) {
-        System.out.print(results[i]+"\n");
+    var iter = hr.iterator();
+    while (iter.hasNext()) {
+        out.print(iter.next()+"\n");
     }
-} catch (err) {
-    System.err.print("error:\n");
-    System.err.print(err.message+"\n");
+} catch (e) {
+    err.print("error:\n");
+    err.print(e.message+"\n");
 }

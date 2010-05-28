@@ -30,35 +30,33 @@ public class HesiodFilsysResult implements Iterable<Map<String,String>> {
         // in a map (whose keys depend on the FS type).
 		
 		Map<String,String> map = new LinkedHashMap<String,String>();
+		String[] temp = s.split("\\s",2);
 
-		String[] t = s.split("\\s",2);
-		String type = t[0];
-		String rest = t[1];
-		
+		String type = temp[0];
 		map.put("type", type);
-		
+
+		String rest = temp[1];
+		List<String> parts = Arrays.asList(rest.split("\\s"));
+		Iterator<String> iter = parts.iterator();
+
 		// Modern hesiod DCM creates: NFS, RVD, AFS, ERR, MUL
-		if (type.equals("ERR")) {
+		if (type.matches("^(AFS|UFS|LOC)$") ) {
+			if (iter.hasNext()) map.put("location",   iter.next());
+			if (iter.hasNext()) map.put("mode",       iter.next());
+			if (iter.hasNext()) map.put("mountpoint", iter.next());
+			if (iter.hasNext()) map.put("priority",   iter.next());
+		} else if (type.matches("^(NFS|RVD)$")) {
+			if (iter.hasNext()) map.put("location",   iter.next());
+			if (iter.hasNext()) map.put("server",     iter.next());
+			if (iter.hasNext()) map.put("mode",       iter.next());
+			if (iter.hasNext()) map.put("mountpoint", iter.next());
+			if (iter.hasNext()) map.put("priority",   iter.next());
+		} else if (type.equals("ERR")) {
 			map.put("message", rest);
 		} else if (type.equals("MUL")) {
 			map.put("locations", rest);
 		} else {
-			List<String> parts = Arrays.asList(rest.split("\\s"));
-			Iterator<String> iter = parts.iterator();
-			if (type.matches("^(NFS|RVD)$")) {
-				if (iter.hasNext()) map.put("location",   iter.next());
-				if (iter.hasNext()) map.put("server",     iter.next());
-				if (iter.hasNext()) map.put("mode",       iter.next());
-				if (iter.hasNext()) map.put("mountpoint", iter.next());
-				if (iter.hasNext()) map.put("priority",   iter.next());
-			} else if (type.matches("^(AFS|UFS|LOC)$") ) {
-				if (iter.hasNext()) map.put("location",   iter.next());
-				if (iter.hasNext()) map.put("mode",       iter.next());
-				if (iter.hasNext()) map.put("mountpoint", iter.next());
-				if (iter.hasNext()) map.put("priority",   iter.next());
-			} else {
-				throw new HesiodException(String.format("Unknown filsys type: %s", type));
-			}
+			throw new HesiodException(String.format("Unknown filsys type: %s", type));
 		}
 		return map;
 	}

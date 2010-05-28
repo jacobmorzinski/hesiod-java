@@ -1,37 +1,28 @@
 package edu.mit.hesiod;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-public class HesiodGroupResult extends HesiodResult {
-	Map<String,String> group = new LinkedHashMap<String,String>();
+public class HesiodGroupResult implements Iterable<Map<String,String>> {
+	List<Map<String,String>> groups;
 	
-	public Map<String,String> getGroup() {
-		return group;
+	public HesiodGroupResult() {
+		groups = new ArrayList<Map<String,String>>();
 	}
 
-	public void setGroup(Map<String, String> arg) {
-		this.group = arg;
+	public HesiodGroupResult(HesiodResult hr) {
+		groups = new ArrayList<Map<String,String>>();
+		for (String s : hr) {
+			groups.add(parse(s));
+		}
 	}
 
-	public HesiodGroupResult(String[] results) throws HesiodException {
-		// Store bare results array, then parse into group info.
-		super(results);
-		parseGroup();
-	}
-
-	public HesiodGroupResult(HesiodResult hr) throws HesiodException {
-		// Store bare results array, then parse into group info.
-		super(hr.getResults());
-		parseGroup();
-	}
-
-	protected void parseGroup() throws HesiodException {
-		// Assume there is only one group.
-		String s = this.getResults(0);
+	static Map<String, String> parse(String s) {
 
 		// Split it into fields to store in a map.
 		// Hesiod line has: 
@@ -45,8 +36,15 @@ public class HesiodGroupResult extends HesiodResult {
 		if (iter.hasNext()) map.put("passwd", iter.next());
 		if (iter.hasNext()) map.put("gid",    iter.next());
 		if (iter.hasNext()) map.put("mem",    iter.next());
-		
-		this.group = map;
+		return map;
+	}
+
+	public Iterator<Map<String, String>> iterator() {
+		return groups.iterator();
+	}
+	
+	public String toString() {
+		return groups.toString();
 	}
 }
 
