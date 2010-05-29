@@ -85,11 +85,15 @@ var hpr = h.lookupPcap("ashdown").iterator().next();
 out.print(hpr + "\n");
 out.print(hpr.get("name") + "\n");
 
-quit();
-
 out.print("-Test lookupService(...)-\n");
 var hsr = h.lookupService("moira_db");
-out.print(hsr.getService() + "\n");
+out.print(hsr + "\n");
 var hsr = h.lookupService("echo");
-out.print(hsr.getService() + "\n");
-out.print(hsr.getService().get(0).get("name") + "\n");
+var iter = hsr.iterator();
+while(iter.hasNext()) {
+    var r = iter.next();
+    out.print(r + "\n");
+    if (r.get("proto") == "tcp") {
+	out.print(r.get("port") + "\n");
+    }
+}
