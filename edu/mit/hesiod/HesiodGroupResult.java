@@ -2,13 +2,12 @@ package edu.mit.hesiod;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-public class HesiodGroupResult implements Iterable<Map<String,String>> {
+public class HesiodGroupResult extends HesiodResult {
 	List<Map<String,String>> groups;
 	
 	public HesiodGroupResult() {
@@ -20,6 +19,10 @@ public class HesiodGroupResult implements Iterable<Map<String,String>> {
 		for (String s : hr) {
 			groups.add(parse(s));
 		}
+	}
+	
+	public List<Map<String,String>> parse() {
+		return groups;
 	}
 
 	static Map<String, String> parse(String s) {
@@ -39,10 +42,6 @@ public class HesiodGroupResult implements Iterable<Map<String,String>> {
 		return map;
 	}
 
-	public Iterator<Map<String, String>> iterator() {
-		return groups.iterator();
-	}
-	
 	public String toString() {
 		return groups.toString();
 	}

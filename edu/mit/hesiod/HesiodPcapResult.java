@@ -2,13 +2,12 @@ package edu.mit.hesiod;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-public class HesiodPcapResult implements Iterable<Map<String,Object>> {
+public class HesiodPcapResult extends HesiodResult {
 	List<Map<String,Object>> pcaps;
 	
 	public HesiodPcapResult() {
@@ -20,6 +19,10 @@ public class HesiodPcapResult implements Iterable<Map<String,Object>> {
 		for (String s : hr) {
 		pcaps.add(parse(s));
 		}
+	}
+	
+	public List<Map<String,Object>> parse() {
+		return pcaps;
 	}
 
 	static Map<String,Object> parse(String s) throws HesiodException {
@@ -71,10 +74,6 @@ public class HesiodPcapResult implements Iterable<Map<String,Object>> {
 		return map;
 	}
 
-	public Iterator<Map<String, Object>> iterator() {
-		return pcaps.iterator();
-	}
-	
 	public String toString() {
 		return pcaps.toString();
 	}

@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HesiodFilsysResult implements Iterable<Map<String,String>> {
+public class HesiodFilsysResult extends HesiodResult {
 	List<Map<String,String>> filsys;
 	
 	public HesiodFilsysResult() {
@@ -24,8 +24,12 @@ public class HesiodFilsysResult implements Iterable<Map<String,String>> {
 		// Filesystems can have an optional priority.  Sort:
 		Collections.sort(filsys, new HesiodFilsysSorter());
 	}
+	
+	public List<Map<String,String>> parse() {
+		return filsys;
+	}
 
-	static Map<String,String> parse(String s) throws HesiodException {
+	Map<String,String> parse(String s) throws HesiodException {
 		// Split on whitespace and using those words as values
         // in a map (whose keys depend on the FS type).
 		
@@ -76,10 +80,6 @@ public class HesiodFilsysResult implements Iterable<Map<String,String>> {
 			if (p1 > p2) return 1;
 			return 0;
 		}
-	}
-
-	public Iterator<Map<String, String>> iterator() {
-		return filsys.iterator();
 	}
 
 	public String toString() {

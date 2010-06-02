@@ -2,13 +2,12 @@ package edu.mit.hesiod;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-public class HesiodPoboxResult implements Iterable<Map<String,String>> {
+public class HesiodPoboxResult extends HesiodResult {
 	List<Map<String,String>> poboxes;
 	
 	public HesiodPoboxResult() {
@@ -20,6 +19,10 @@ public class HesiodPoboxResult implements Iterable<Map<String,String>> {
 		for (String s : hr) {
 			poboxes.add(parse(s));
 		}
+	}
+	
+	public List<Map<String,String>> parse() {
+		return poboxes;
 	}
 
 	static Map<String, String> parse(String s) {
@@ -36,10 +39,6 @@ public class HesiodPoboxResult implements Iterable<Map<String,String>> {
 		return map;
 	}
 
-	public Iterator<Map<String, String>> iterator() {
-		return poboxes.iterator();
-	}
-	
 	public String toString() {
 		return poboxes.toString();
 	}

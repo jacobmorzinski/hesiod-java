@@ -2,13 +2,12 @@ package edu.mit.hesiod;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-public class HesiodPasswdResult implements Iterable<Map<String,String>> {
+public class HesiodPasswdResult extends HesiodResult {
 	List<Map<String,String>> passwds;
 	
 	public HesiodPasswdResult() {
@@ -20,6 +19,10 @@ public class HesiodPasswdResult implements Iterable<Map<String,String>> {
 		for (String s : hr) {
 			passwds.add(parse(s));
 		}
+	}
+	
+	public List<Map<String,String>> parse() {
+		return passwds;
 	}
 
 	static Map<String,String> parse(String s) {
@@ -44,10 +47,6 @@ public class HesiodPasswdResult implements Iterable<Map<String,String>> {
 		return map;
 	}
 
-	public Iterator<Map<String, String>> iterator() {
-		return passwds.iterator();
-	}
-	
 	public String toString() {
 		return passwds.toString();
 	}

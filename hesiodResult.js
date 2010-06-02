@@ -42,20 +42,20 @@ while (iter.hasNext()) {
 out.print("-Test lookupFilsys(dev-sun4sys-94)-\n");
 var hfr = h.lookupFilsys("dev-sun4sys-94");
 out.print(hfr + "\n");
-out.print(hfr.iterator().next().get("locations") + "\n");
+out.print(hfr.parse().get(0).get("locations") + "\n");
 
 out.print("-Test lookupPasswd(jmorzins)-\n");
-var hpr = h.lookupPasswd("jmorzins").iterator().next();
+var hpr = h.lookupPasswd("jmorzins");
 out.print(hpr + "\n");
-out.print(hpr.get("gecos") + "\n");
+out.print(hpr.parse().get(0).get("gecos") + "\n");
 
 out.print("-Test lookupPobox(jmorzins)-\n");
-var hpr = h.lookupPobox("jmorzins").iterator().next();
+var hpr = h.lookupPobox("jmorzins");
 out.print(hpr + "\n");
-out.print(hpr.get("host") + "\n");
+out.print(hpr.parse().get(0).get("host") + "\n");
 
 out.print("-Test lookupGroup(gaccounts)-\n");
-var hgr = h.lookupGroup("gaccounts").iterator().next();
+var hgr = h.lookupGroup("gaccounts").parse().get(0);
 out.print(hgr + "\n");
 out.print(hgr.get("gid") + "\n");
 
@@ -64,16 +64,17 @@ var hcr = h.lookupCluster("mark-the-great-print");
 out.print(hcr + "\n");
 var hcr = h.lookupCluster("early-linux");
 out.print(hcr + "\n");
-var hcr = h.lookupCluster("horobi.mit.edu");
-for (var hcri = hcr.iterator(); hcri.hasNext(); ) {
+var hcr = h.lookupCluster("horobi");
+for (var hcri = hcr.parse().iterator(); hcri.hasNext(); ) {
     var r = hcri.next();
     out.print(r + "\n");
 }
-for (var hcri = hcr.iterator(); hcri.hasNext(); ) {
+for (var hcri = hcr.parse().iterator(); hcri.hasNext(); ) {
     var r = hcri.next();
     if (r.containsKey("syscontrol")) {
 	out.print(r.get("syscontrol") + "\n");
     }
+    out.print(r + "\n");
 }
 
 out.print("-Test lookupPcap(...)-\n");
@@ -81,7 +82,7 @@ var hpr = h.lookupPcap("sipb");
 out.print(hpr + "\n");
 var hpr = h.lookupPcap("mark-the-great");
 out.print(hpr + "\n");
-var hpr = h.lookupPcap("ashdown").iterator().next();
+var hpr = h.lookupPcap("ashdown").parse().get(0);
 out.print(hpr + "\n");
 out.print(hpr.get("name") + "\n");
 
@@ -89,7 +90,7 @@ out.print("-Test lookupService(...)-\n");
 var hsr = h.lookupService("moira_db");
 out.print(hsr + "\n");
 var hsr = h.lookupService("echo");
-var iter = hsr.iterator();
+var iter = hsr.parse().iterator();
 while(iter.hasNext()) {
     var r = iter.next();
     out.print(r + "\n");

@@ -1,12 +1,11 @@
 package edu.mit.hesiod;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HesiodClusterResult implements Iterable<Map<String,String>> {
+public class HesiodClusterResult extends HesiodResult {
 	List<Map<String,String>> clusters;
 	
 	public HesiodClusterResult() {
@@ -19,6 +18,10 @@ public class HesiodClusterResult implements Iterable<Map<String,String>> {
 			clusters.add(parse(s));
 		}
 	}
+	
+	public List<Map<String,String>> parse() {
+		return clusters;
+	}
 
 	protected Map<String,String> parse(String s) {
 		Map<String,String> map = new LinkedHashMap<String,String>();
@@ -27,10 +30,6 @@ public class HesiodClusterResult implements Iterable<Map<String,String>> {
 		return map;
 	}
 
-	public Iterator<Map<String, String>> iterator() {
-		return clusters.iterator();
-	}
-	
 	public String toString() {
 		return clusters.toString();
 	}

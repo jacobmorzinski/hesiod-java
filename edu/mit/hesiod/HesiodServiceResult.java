@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HesiodServiceResult implements Iterable<Map<String,String>> {
+public class HesiodServiceResult extends HesiodResult {
 	List<Map<String,String>> services;
 	
 	public HesiodServiceResult() {
@@ -20,6 +20,10 @@ public class HesiodServiceResult implements Iterable<Map<String,String>> {
 			 services.add(parse(s));
 		 }
 	}
+	
+	public List<Map<String,String>> parse() {
+		return services;
+	}
 
 	static Map<String,String> parse(String s) {
 		Map<String,String> map = new LinkedHashMap<String,String>();
@@ -31,10 +35,6 @@ public class HesiodServiceResult implements Iterable<Map<String,String>> {
 		return map;
 	}
 
-	public Iterator<Map<String, String>> iterator() {
-		return services.iterator();
-	}
-	
 	public String toString() {
 		return services.toString();
 	}
