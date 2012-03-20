@@ -21,7 +21,7 @@ public class HesiodGroupResult extends HesiodResult {
 		}
 	}
 	
-	public List<Map<String,String>> parse() {
+	public List<Map<String,String>> list() {
 		return groups;
 	}
 

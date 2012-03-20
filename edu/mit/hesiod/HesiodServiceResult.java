@@ -21,7 +21,7 @@ public class HesiodServiceResult extends HesiodResult {
 		 }
 	}
 	
-	public List<Map<String,String>> parse() {
+	public List<Map<String,String>> list() {
 		return services;
 	}
 

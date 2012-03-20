@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class HesiodClusterResult extends HesiodResult {
 	List<Map<String,String>> clusters;
 	
@@ -19,7 +20,7 @@ public class HesiodClusterResult extends HesiodResult {
 		}
 	}
 	
-	public List<Map<String,String>> parse() {
+	public List<Map<String,String>> list() {
 		return clusters;
 	}
 

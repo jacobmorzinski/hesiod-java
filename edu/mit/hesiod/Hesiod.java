@@ -15,6 +15,7 @@ import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 
+
 /**
  * A class for looking up information from Hesiod.
  * 
@@ -133,13 +134,6 @@ public class Hesiod {
 		return results;
 	}
 	
-	public HesiodFilsysResult lookupFilsys(String name)
-			throws NamingException, HesiodException {
-		HesiodResult hr = resolve(name, "filsys");
-		HesiodFilsysResult hfr = new HesiodFilsysResult(hr);
-		return hfr;
-	}
-
 	public HesiodPasswdResult lookupPasswd(String name)
 			throws NamingException, HesiodException {
 		HesiodResult hr = resolve(name, "passwd");
@@ -147,25 +141,18 @@ public class Hesiod {
 		return hfr;
 	}
 
-	public HesiodPasswdResult lookupUID(String name)
+	public HesiodFilsysResult lookupFilsys(String name)
 			throws NamingException, HesiodException {
-		HesiodResult hr = resolve(name, "uid");
-		HesiodPasswdResult hfr = new HesiodPasswdResult(hr);
+		HesiodResult hr = resolve(name, "filsys");
+		HesiodFilsysResult hfr = new HesiodFilsysResult(hr);
 		return hfr;
 	}
-	
+
 	public HesiodPoboxResult lookupPobox(String name)
 			throws NamingException, HesiodException {
 		HesiodResult hr = resolve(name, "pobox");
 		HesiodPoboxResult hpr = new HesiodPoboxResult(hr);
 		return hpr;
-	}
-	
-	public HesiodGroupResult lookupGroup(String name)
-			throws NamingException, HesiodException {
-		HesiodResult hr = resolve(name, "group");
-		HesiodGroupResult hgr = new HesiodGroupResult(hr);
-		return hgr;
 	}
 
 	public HesiodGroupResult lookupGID(String name)
@@ -175,13 +162,41 @@ public class Hesiod {
 		return hgr;
 	}
 
+	public HesiodPasswdResult lookupUID(String name)
+			throws NamingException, HesiodException {
+		HesiodResult hr = resolve(name, "uid");
+		HesiodPasswdResult hfr = new HesiodPasswdResult(hr);
+		return hfr;
+	}
+	
+	public HesiodResult lookupGrplist(String name)
+			throws NamingException, HesiodException {
+		HesiodResult hr = resolve(name, "grplist");
+		HesiodGrplistResult hglr = new HesiodGrplistResult(hr);
+		return hglr;
+	}
+
+	public HesiodSlocResult lookupSloc(String name)
+			throws NamingException, HesiodException {
+		HesiodResult hr = resolve(name, "sloc");
+		HesiodSlocResult hsr = new HesiodSlocResult(hr);
+		return hsr;
+	}
+
 	public HesiodClusterResult lookupCluster(String name)
-			throws NamingException,	HesiodException {
+			throws NamingException, HesiodException {
 		HesiodResult hr = resolve(name, "cluster");
 		HesiodClusterResult hcr = new HesiodClusterResult(hr);
 		return hcr;
 	}
-	
+
+	public HesiodGroupResult lookupGroup(String name)
+			throws NamingException, HesiodException {
+		HesiodResult hr = resolve(name, "group");
+		HesiodGroupResult hgr = new HesiodGroupResult(hr);
+		return hgr;
+	}
+
 	public HesiodPcapResult lookupPcap(String name)
 			throws NamingException, HesiodException {
 		HesiodResult hr = resolve(name, "pcap");

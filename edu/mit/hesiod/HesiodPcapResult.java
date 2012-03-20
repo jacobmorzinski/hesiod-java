@@ -17,11 +17,11 @@ public class HesiodPcapResult extends HesiodResult {
 	public HesiodPcapResult(HesiodResult hr) throws HesiodException {
 		pcaps = new ArrayList<Map<String,Object>>();
 		for (String s : hr) {
-		pcaps.add(parse(s));
+			pcaps.add(parse(s));
 		}
 	}
 	
-	public List<Map<String,Object>> parse() {
+	public List<Map<String,Object>> list() {
 		return pcaps;
 	}
 

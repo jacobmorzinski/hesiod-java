@@ -25,7 +25,7 @@ public class HesiodFilsysResult extends HesiodResult {
 		Collections.sort(filsys, new HesiodFilsysSorter());
 	}
 	
-	public List<Map<String,String>> parse() {
+	public List<Map<String,String>> list() {
 		return filsys;
 	}
 

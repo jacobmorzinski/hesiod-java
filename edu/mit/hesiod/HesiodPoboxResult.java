@@ -21,7 +21,7 @@ public class HesiodPoboxResult extends HesiodResult {
 		}
 	}
 	
-	public List<Map<String,String>> parse() {
+	public List<Map<String,String>> list() {
 		return poboxes;
 	}
 
