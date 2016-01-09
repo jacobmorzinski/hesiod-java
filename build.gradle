@@ -12,7 +12,6 @@ apply plugin: 'java'
 apply plugin: 'application'
 
 mainClassName = 'edu.mit.jmorzins.hesiod.Hesiod'
-mainClassName = 'edu.mit.jmorzins.hesinfo.Hesinfo'
 
 defaultTasks 'run'
 
