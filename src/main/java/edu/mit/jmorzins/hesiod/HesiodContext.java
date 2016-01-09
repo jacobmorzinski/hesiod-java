@@ -1,4 +1,4 @@
-package edu.mit.hesiod;
+package edu.mit.jmorzins.hesiod;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -98,7 +98,7 @@ public class HesiodContext {
 	/**
 	 * Initialize hesiod search context.
 	 * 
-	 * @see HesiodContext(String rhs)
+	 * @see HesiodContext(String)
 	 */
 	public HesiodContext() throws HesiodException {
 		this(null);

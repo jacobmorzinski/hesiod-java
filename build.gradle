@@ -1,0 +1,48 @@
+// vim:shiftwidth=4:tabstop=4:expandtab:filetype=groovy
+
+// creates tasks including: shadowJar, installShadowApp
+plugins {
+    id 'com.github.johnrengelman.shadow' version '1.2.2'
+}
+
+group 'edu.mit.jmorzins.hesiod'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'edu.mit.jmorzins.hesiod.Hesiod'
+mainClassName = 'edu.mit.jmorzins.hesinfo.Hesinfo'
+
+defaultTasks 'run'
+
+run {
+    if (project.hasProperty("args")) {
+        args project.args.split('\\s+')
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    manifest {
+        attributes('Main-Class': 'hesiod')
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+task wrapper(type: Wrapper) {
+    description = "Updates gradlew and supporting files."
+    gradleVersion = '2.9'
+    // The default distributionUrl is:
+    // http://services.gradle.org/distributions/gradle-${gradleVersion}-bin.zip
+    //
+    // By changing to the "all", distribution, IDEs have access to
+    // source code to help with code completion.
+    distributionUrl="https://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
+}

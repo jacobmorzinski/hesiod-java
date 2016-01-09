@@ -1,4 +1,4 @@
-package edu.mit.hesiod;
+package edu.mit.jmorzins.hesiod;
 
 public class HesiodException extends Exception {
 	private static final long serialVersionUID = 3942301354700361844L;

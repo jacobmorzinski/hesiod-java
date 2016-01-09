@@ -1,4 +1,4 @@
-package edu.mit.hesiod;
+package edu.mit.jmorzins.hesiod;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

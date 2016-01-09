@@ -1,4 +1,4 @@
-package edu.mit.hesiod;
+package edu.mit.jmorzins.hesiod;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -215,8 +215,8 @@ public class Hesiod {
 	/**
 	 * Alternate name for the resolve() method.
 	 * 
-	 * @see Hesiod#method(String hesiodName, String hesiodType)
-	 * 
+	 * @see Hesiod#resolve(String hesiodName, String hesiodType)
+	 *
 	 * @param hesiodName
 	 * @param hesiodType
 	 * @throws NamingException
