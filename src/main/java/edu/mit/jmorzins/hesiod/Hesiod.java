@@ -326,7 +326,7 @@ public class Hesiod {
 				"service" };
 
 		if ((args.length == 0) || (args.length > 2)) {
-			System.err.format("Usage:  java %s <name> [ <type> ]\n",
+			System.err.format("Usage:  java %s <name> [ <type> ]%n",
 					Hesiod.class.getName());
 			System.exit(1);
 		}
@@ -350,7 +350,7 @@ public class Hesiod {
 				try {
 					HesiodResult hr = hesiodInstance.resolve(hesiodName, thisType);
 					for (String s : hr.getResults()) {
-						System.out.format("%10s: %s\n", thisType.toUpperCase(), s);
+						System.out.format("%10s: %s%n", thisType.toUpperCase(), s);
 					}
 				} catch (NameNotFoundException e) {
 					;
